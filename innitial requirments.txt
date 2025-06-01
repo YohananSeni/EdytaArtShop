@@ -1,0 +1,166 @@
+Technical Requirements Document: Art Print Shop
+Project Overview
+Build a small art print shop website using React, Node.js, and PostgreSQL with PayPal integration. All content should use dummy data initially.
+
+Tech Stack Requirements
+Frontend: React.js (latest stable version)
+Backend: Node.js with Express.js
+Database: PostgreSQL
+Payment: PayPal integration
+Image Storage: Local storage initially (plan for cloud migration)
+Database Schema Requirements
+Tables to Create:
+-- Products table
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    category VARCHAR(50) NOT NULL, -- 'print' or 'original'
+    image_url VARCHAR(500),
+    stock_quantity INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Events/Workshops table
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date TIMESTAMP NOT NULL,
+    price DECIMAL(10,2),
+    max_participants INTEGER,
+    current_participants INTEGER DEFAULT 0,
+    location VARCHAR(255),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Orders table
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    customer_email VARCHAR(255) NOT NULL,
+    customer_name VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    paypal_transaction_id VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'pending',
+    shipping_address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Order items table
+CREATE TABLE order_items (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER REFERENCES orders(id),
+    product_id INTEGER REFERENCES products(id),
+    event_id INTEGER REFERENCES events(id),
+    quantity INTEGER NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL
+);
+Backend API Requirements
+Required Endpoints:
+GET /api/products - Get all active products
+GET /api/products/:category - Get products by category (prints/originals)
+GET /api/events - Get all upcoming events/workshops
+POST /api/orders - Create new order
+POST /api/paypal/create-payment - Initialize PayPal payment
+POST /api/paypal/execute-payment - Complete PayPal payment
+GET /api/about - Get about page content (can be hardcoded initially)
+Environment Variables:
+DATABASE_URL=postgresql://username:password@localhost:5432/artshop
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+PAYPAL_MODE=sandbox
+PORT=3001
+Frontend Requirements
+Required Pages/Components:
+Home Page - Featured products and brief intro
+About Page - Artist bio and story (dummy content)
+Prints Page - Grid of print products with filtering
+Originals Page - Grid of original artwork
+Workshops & Events - List of upcoming events with booking
+Product Detail Page - Individual product view with buy button
+Shopping Cart - Cart functionality with PayPal checkout
+Order Confirmation - Success/failure page after payment
+Key Components to Build:
+ProductGrid component
+ProductCard component
+ShoppingCart component
+PayPalCheckout component
+EventCard component
+Navigation component
+Footer component
+Dummy Data Requirements
+Sample Products (10 prints, 5 originals):
+Include variety of art styles
+Price range: $15-50 for prints, $200-800 for originals
+Use placeholder images (Lorem Picsum or similar)
+Realistic titles and descriptions
+Sample Events (3-5 workshops):
+Different workshop types (painting, drawing, mixed media)
+Various dates in next 2 months
+Price range: $50-150
+Include materials and skill level info
+About Page Content:
+Artist bio (2-3 paragraphs)
+Artist statement
+Contact information
+Studio photos (placeholder images)
+PayPal Integration Specifications
+Required Functionality:
+Sandbox environment initially
+Support for both individual products and workshop bookings
+Handle payment success/failure redirects
+Store transaction IDs in database
+Send confirmation emails (basic email service)
+Payment Flow:
+User adds items to cart
+Proceeds to checkout
+PayPal payment window opens
+After successful payment, redirect to confirmation
+Update order status in database
+Send confirmation email
+File Structure Requirements
+/art-shop
+├── /backend
+│   ├── /routes
+│   ├── /models
+│   ├── /middleware
+│   ├── /config
+│   └── server.js
+├── /frontend
+│   ├── /src
+│   │   ├── /components
+│   │   ├── /pages
+│   │   ├── /services
+│   │   └── /styles
+│   └── public/
+└── /database
+    └── schema.sql
+Deployment Requirements
+Prepare for deployment on platforms like Heroku, Railway, or similar
+Environment-specific configuration files
+Build scripts for production
+Database migration scripts
+Deliverables Expected
+Fully functional website with all pages
+Working PayPal payment integration
+Responsive design (mobile-friendly)
+Basic admin functionality for viewing orders
+Populated database with dummy data
+README with setup instructions
+Basic error handling and loading states
+Timeline Estimate
+Database setup and backend API: 3-4 days
+Frontend development: 5-6 days
+PayPal integration: 2-3 days
+Testing and refinement: 2-3 days Total: 12-16 days
+Priority Order
+Database schema and basic API endpoints
+Core frontend pages (Home, About, Products)
+Shopping cart functionality
+PayPal integration
+Events/workshops features
+Responsive design and polish
+Begin with the database setup and core API endpoints first. Populate with dummy data early to enable frontend development.
