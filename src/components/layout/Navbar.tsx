@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <Palette size={32} className="text-indigo-600" />
-          <span className="text-xl font-serif font-medium">Art Print Shop</span>
+          <span className="text-xl font-serif font-medium">ebogunia Art Shop</span>
         </Link>
         
         {/* Desktop Navigation */}

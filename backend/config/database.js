@@ -23,14 +23,6 @@ export const setupDatabase = async () => {
     const schemaSQL = fs.readFileSync(path.join(__dirname, '../../database/schema.sql'), 'utf8');
     await pool.query(schemaSQL);
     console.log('Database setup complete');
-    
-    // Check if we need to add sample data
-    const result = await pool.query('SELECT COUNT(*) FROM products');
-    if (parseInt(result.rows[0].count) === 0) {
-      const sampleDataSQL = fs.readFileSync(path.join(__dirname, '../../database/sample-data.sql'), 'utf8');
-      await pool.query(sampleDataSQL);
-      console.log('Sample data added to database');
-    }
   } catch (error) {
     console.error('Error setting up database:', error);
   }

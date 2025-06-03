@@ -8,65 +8,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
-// TODO: Replace with actual API calls to PostgreSQL database
-const dummyProducts = [
-  {
-    id: 1,
-    title: "Ocean Waves Abstract",
-    description: "A vibrant abstract print inspired by ocean waves, featuring blues and teals in flowing patterns.",
-    price: 25.00,
-    category: "print",
-    image_url: "https://images.pexels.com/photos/2583852/pexels-photo-2583852.jpeg",
-    stock_quantity: 50,
-    is_active: true
-  },
-  {
-    id: 2,
-    title: "Forest Meditation",
-    description: "Calming forest scene with misty greens and subtle light patterns filtering through trees.",
-    price: 30.00,
-    category: "print",
-    image_url: "https://images.pexels.com/photos/6004828/pexels-photo-6004828.jpeg",
-    stock_quantity: 35,
-    is_active: true
-  },
-  {
-    id: 3,
-    title: "Coastal Memories",
-    description: "Original acrylic painting on canvas depicting abstracted coastal landscape with textured waves and horizon.",
-    price: 450.00,
-    category: "original",
-    image_url: "https://images.pexels.com/photos/2079851/pexels-photo-2079851.jpeg",
-    stock_quantity: 1,
-    is_active: true
-  }
-];
 
-// TODO: Implement real-time event availability checking
-const dummyEvents = [
-  {
-    id: 1,
-    title: "Introduction to Printmaking",
-    description: "Learn the basics of relief printmaking in this hands-on workshop suitable for beginners. All materials provided.",
-    event_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-    price: 75.00,
-    max_participants: 12,
-    current_participants: 4,
-    location: "Main Street Studio, Portland",
-    is_active: true
-  },
-  {
-    id: 2,
-    title: "Watercolor Techniques",
-    description: "Explore various watercolor techniques from wet-on-wet to detailed dry brush. Suitable for all skill levels.",
-    event_date: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(),
-    price: 65.00,
-    max_participants: 15,
-    current_participants: 7,
-    location: "Riverside Arts Center, Portland",
-    is_active: true
-  }
-];
 
 // TODO: Move content to CMS for easy updates
 const dummyAboutData = {
@@ -114,33 +56,75 @@ const api = axios.create({
 // TODO: Implement request timeout handling
 
 export const getProducts = async () => {
-  // TODO: Replace with actual API call
-  return dummyProducts;
+  const response = await axios.get(`${API_URL}/products`);
+  return response.data.map((product: any) => ({
+    ...product,
+    price: Number(product.price)
+  }));
 };
 
 export const getProductsByCategory = async (category: string) => {
-  // TODO: Replace with actual API call
-  return dummyProducts.filter(product => product.category === category);
+  const response = await axios.get(`${API_URL}/products/${category}`);
+  return response.data.map((product: any) => ({
+    ...product,
+    price: Number(product.price)
+  }));
 };
 
 export const getProductById = async (id: number) => {
-  // TODO: Replace with actual API call
-  return dummyProducts.find(product => product.id === id);
+  const response = await axios.get(`${API_URL}/products/detail/${id}`);
+  const product = response.data;
+  return {
+    ...product,
+    price: Number(product.price)
+  };
 };
 
 export const getEvents = async () => {
-  // TODO: Replace with actual API call
-  return dummyEvents;
+  const response = await axios.get(`${API_URL}/events`);
+  return response.data;
 };
 
 export const getEventById = async (id: number) => {
-  // TODO: Replace with actual API call
-  return dummyEvents.find(event => event.id === id);
+  const response = await axios.get(`${API_URL}/events/${id}`);
+  return response.data;
+};
+
+// Static about data
+const aboutData = {
+  artistName: "Jane Doe",
+  biography: `Jane Doe is a contemporary artist based in Portland, Oregon, specializing in vibrant 
+    abstract landscapes and botanical studies. With over 15 years of experience, her work 
+    has been featured in galleries across the United States and Europe.`,
+  artistStatement: `My work explores the boundary between the structured world we build and the organic 
+    chaos of nature. Through color and form, I seek to create spaces where viewers can 
+    find both energy and contemplation.`,
+  studioImages: [
+    "https://images.pexels.com/photos/3094218/pexels-photo-3094218.jpeg",
+    "https://images.pexels.com/photos/3094217/pexels-photo-3094217.jpeg",
+    "https://images.pexels.com/photos/3094216/pexels-photo-3094216.jpeg"
+  ],
+  contactInfo: {
+    email: "contact@janedoeart.com",
+    instagram: "@janedoe_art",
+    studioLocation: "Portland Arts District, Oregon"
+  },
+  exhibitions: [
+    {
+      year: "2023",
+      title: "Natural Abstractions",
+      gallery: "Modern Space Gallery, New York"
+    },
+    {
+      year: "2022",
+      title: "Color Fields",
+      gallery: "West Coast Arts, San Francisco"
+    }
+  ]
 };
 
 export const getAboutData = async () => {
-  // TODO: Replace with actual API call
-  return dummyAboutData;
+  return aboutData;
 };
 
 // TODO: Implement proper order validation and error handling
